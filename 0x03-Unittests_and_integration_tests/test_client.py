@@ -21,7 +21,8 @@ class TestGithubOrgClient(unittest.TestCase):
         
     def test_public_repos_url(self):
         """Test _public_repos_url returns expected URL from org."""
-        with patch.object(GithubOrgClient, "org", new_callable=PropertyMock) as mock_org:
+        with patch.object(GithubOrgClient, "org", new_callable=PropertyMock) 
+        as mock_org:
             mock_org.return_value = {
                 "repos_url": "https://api.github.com/orgs/test_org/repos"
             }
@@ -44,7 +45,8 @@ class TestGithubOrgClient(unittest.TestCase):
         mock_get_json.return_value = sample_repos
 
         # Patch the _public_repos_url property
-        with patch.object(GithubOrgClient, "_public_repos_url", new_callable=PropertyMock) as mock_repos_url:
+        with patch.object(GithubOrgClient, "_public_repos_url", new_callable=PropertyMock) 
+        as mock_repos_url:
             mock_repos_url.return_value = "https://api.github.com/orgs/test_org/repos"
 
             client = GithubOrgClient("test_org")
