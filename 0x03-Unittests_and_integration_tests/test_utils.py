@@ -72,4 +72,3 @@ if __name__ == "__main__":
     """def test_access_nested_map_exception(self, mapping, seq):
          Test access_nested_map raises KeyError
         self.assertRaises(KeyError, access_nested_map, mapping, seq)"""
-    
