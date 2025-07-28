@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Exit on any error
+set -e
+
+# Define your Django deployment name and namespace if applicable
+DEPLOYMENT_NAME="django-app"
+NAMESPACE="default"  # change if your app is in a different namespace
+
+echo "🔧 Scaling deployment '$DEPLOYMENT_NAME' to 3 replicas..."
+kubectl scale deployment "$DEPLOYMENT_NAME" --replicas=3 --namespace="$NAMESPACE"
+
+echo "⏳ Waiting for pods to be ready..."
+kubectl wait --for=condition=available --timeout=60s deployment/"$DEPLOYMENT_NAME" --namespace="$NAMESPACE"
+
+echo "📋 Verifying that multiple pods are running..."
+kubectl get pods --selector=app="$DEPLOYMENT_NAME" --namespace="$NAMESPACE"
+
+echo "🚀 Performing load testing with wrk..."
+# Replace with your service's external IP or port-forward if needed
+APP_URL="http://localhost:8000"  # Adjust this URL to your Django service
+
+# 10 threads, 100 connections, 30 seconds duration
+wrk -t10 -c100 -d30s "$APP_URL"
+
+echo "📈 Monitoring resource usage..."
+kubectl top pods --namespace="$NAMESPACE"
+
+echo "✅ Done."
